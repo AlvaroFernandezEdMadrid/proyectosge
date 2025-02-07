@@ -1,22 +1,24 @@
 import tkinter as tk
 from temas import LightTheme
 from temas import DarkTheme
+from conexion import Conexion
+from jugador import Jugador
 
 
 
 class Ventana(tk.Tk):
-    def __init__(self,tema, ancho, alto, titulo, posx, posy):
-        
+    def __init__(self,tema,title,weight, height, x, y):
+        super().__init__()
 
-        #self. scPos= win.winfo_rooty() - win.winfo_x()
+        self.nickname=""
+        self.password=""
+        self.email=""
         
-        
-        self.titulo=titulo
-        self.ancho=ancho
-        self.alto=alto
-        self.posx=posx
-        self.posy=posy
-
+        self.weight = weight
+        self.height = height
+        self.x = x
+        self.y = y
+        self.miTitulo = title
         if(tema==True):
             self.color_cabecera=LightTheme().Color_Cabecera
             self.color_fondo=LightTheme().Color_Fondo
@@ -27,88 +29,24 @@ class Ventana(tk.Tk):
             self.color_fondo=DarkTheme().Color_Fondo
             self.color_footer= DarkTheme().Color_Pie
             self.color_texto=DarkTheme().Color_Texto
+        
+        self.geometry("%dx%d+%d+%d" %(self.weight, self.height, self.x, self.y))
+        self.title(self.miTitulo)
+        self.resizable(False, False)
 
+        self.loginFrames()
         
 
-        
-        super().__init__()
-        self.title(titulo)
-        self.geometry(f"{self.ancho}x{self.alto}+{self.posx}+{self.posy}")
-        
-
-
-
-    def loginFrames(self,titulo):
-        self.cabecera= tk.Frame(
-            self,
-            bg = self.color_cabecera,
-            height = 80,
-            highlightbackground="black",
-            highlightthickness=1
-        )
-        self.cabecera.pack(side = tk.TOP, fill = "both")
-        self.cabecera.propagate(False)
-
-
-        self.footer = tk.Frame(
-            self,
-            bg = self.color_footer,
-            height = 80,
-        )
-        self.footer.pack(side = tk.BOTTOM, fill = "both")
-        self.footer.propagate(False)
-
-
-        self.fondo = tk.Frame(
-            self,
-            bg = self.color_fondo,
-        )
-        self.fondo.pack(expand = True, fill = "both")
-        self.fondo.propagate(False)
-    
-    def RegisterWin(self,donde,titulo):
-        registerWin=tk.Toplevel(donde,titulo)
-
-        self.cabecera= tk.Frame(
-            self,
-            bg = self.color_cabecera,
-            height = 80,
-            highlightbackground="black",
-            highlightthickness=1
-        )
-        self.cabecera.pack(side = tk.TOP, fill = "both")
-        self.cabecera.propagate(False)
-
-
-        self.footer = tk.Frame(
-            self,
-            bg = self.color_footer,
-            height = 80,
-        )
-        self.footer.pack(side = tk.BOTTOM, fill = "both")
-        self.footer.propagate(False)
-
-
-        self.fondo = tk.Frame(
-            self,
-            bg = self.color_fondo,
-        )
-        self.fondo.pack(expand = True, fill = "both")
-        self.fondo.propagate(False)
-        
-
-
-
-        
+    #WIDGETS
     def genTexto(self,donde,texto,size,padx,pady,pos):
        
-        text= tk.Label(donde, text= texto, bg=donde.cget('bg'), font=("Constantia",size,"bold"), fg=self.color_texto , wraplength= self.ancho)
+        text= tk.Label(donde, text= texto, bg=donde.cget('bg'), font=("Constantia",size,"bold"), fg=self.color_texto )
         text.pack(anchor=pos,padx=padx, pady=pady, expand=True)
         return text
     
-    def genEntry(self,donde,padx,pady):
+    def genEntry(self,donde,variable,padx,pady):
        
-        entry= tk.Entry(donde, fg="#000000")
+        entry= tk.Entry(donde, fg="#000000" , textvariable=variable)
         entry.pack(anchor="n",padx=padx, pady=pady, expand=True)
         return entry
     
@@ -116,7 +54,7 @@ class Ventana(tk.Tk):
     def genButton(self,donde,texto,funcion,padx,pady,pos):
        
        boton=tk.Button(donde,text=texto, command= funcion)
-       boton.pack(anchor=pos, padx=padx,pady=pady, ipadx=10, ipady=10 )
+       boton.pack(anchor=pos, padx=padx,pady=pady, ipadx=0, ipady=0 )
        
        return boton
     
@@ -126,8 +64,167 @@ class Ventana(tk.Tk):
        boton.pack(anchor=pos, padx=padx,pady=pady)
        
        return boton
-
-    def genSpacer(self,donde,x,y):
-       spacer=tk.Label(donde,padx=x,pady=y)
-       return spacer
     
+
+
+    def deleteInFrames(self,donde):
+        for widget in donde.winfo_children():
+            widget.destroy()
+
+    def cambioPantalla(self):
+        self.fondo.destroy()
+        if "sidebar" in dir(self):
+            self.sidebar.destroy()
+        self.cabecera.destroy()
+        self.footer.destroy()
+
+    def ventanaLogin(self):
+        self.cambioPantalla()
+        self.loginFrames()
+        
+    def ventanaRegister(self):
+        self.cambioPantalla()        
+        self.registerFrames()
+        
+    
+    def VentanaPrincipal(self):
+        self.cambioPantalla()
+        self.mainFrames()
+        
+
+
+    
+    #PANTALLAS
+
+
+    def loginFrames(self):
+
+        self.geometry("400x500")
+        self.cabecera= tk.Frame(
+            self,
+            bg = self.color_cabecera,
+            height = 80,
+  
+        )
+        self.cabecera.pack(side = tk.TOP, fill = "both")
+        self.cabecera.propagate(False)
+
+
+        self.footer = tk.Frame(
+            self,
+            bg = self.color_footer,
+            height = 80,
+        )
+        self.footer.pack(side = tk.BOTTOM, fill = "both")
+        self.footer.propagate(False)
+
+
+        self.fondo = tk.Frame(
+            self,
+            bg = self.color_fondo,
+        )
+        self.fondo.pack(expand = True, fill = "both")
+        self.fondo.propagate(False)
+
+        tituloCabecera=self.genTexto(self.cabecera,"Login",25,0,20,"center")
+
+        usuarioLbl=self.genTexto(self.fondo,"Usuario", 15,0,0,"s")
+        usuarioE=self.genEntry(self.fondo,self.nickname,0,0)
+        passwordLbl=self.genTexto(self.fondo,"Contraseña", 15,0,0,"s")
+        passwordE=self.genEntry(self.fondo,self.password,0,0)
+        
+        loginbtn=self.genButton(self.fondo,"Acceder",lambda:self.VentanaPrincipal(),0,20,"n")
+
+        registerbtn=self.genLink(self.fondo,"¿No tienes cuenta? Únete",lambda:self.ventanaRegister(),0,10,"n")
+
+
+
+
+        footerLbl=self.genTexto(self.footer,"Creado por Emilio, Kida y Álvaro (Curso 2ºDAM 24-25)", 10,0,0,"center")
+
+
+    def registerFrames(self):
+
+        self.geometry("400x500")
+        self.cabecera= tk.Frame(
+            self,
+            bg = self.color_cabecera,
+            height = 80,
+  
+        )
+        self.cabecera.pack(side = tk.TOP, fill = "both")
+        self.cabecera.propagate(False)
+
+
+        self.footer = tk.Frame(
+            self,
+            bg = self.color_footer,
+            height = 80,
+        )
+        self.footer.pack(side = tk.BOTTOM, fill = "both")
+        self.footer.propagate(False)
+
+
+        self.fondo = tk.Frame(
+            self,
+            bg = self.color_fondo,
+        )
+        self.fondo.pack(expand = True, fill = "both")
+        self.fondo.propagate(False)
+
+        tituloCabecera=self.genTexto(self.cabecera,"Registrar",25,0,20,"center")
+
+        usuarioLbl=self.genTexto(self.fondo,"Usuario", 15,0,0,"s")
+        usuarioE=self.genEntry(self.fondo,self.nickname,0,0)
+        passwordLbl=self.genTexto(self.fondo,"Contraseña", 15,0,0,"s")
+        passwordE=self.genEntry(self.fondo,self.password,0,0)
+        emailLbl=self.genTexto(self.fondo,"E-mail", 15,0,0,"s")
+        emailE=self.genEntry(self.fondo,self.email,0,0)
+        
+        loginbtn=self.genButton(self.fondo,"Registrar",lambda:self.VentanaPrincipal(),0,20,"n")
+
+        registerbtn=self.genLink(self.fondo,"Ingresar",lambda:self.ventanaLogin(),0,10,"n")
+
+
+
+
+        footerLbl=self.genTexto(self.footer,"Creado por Emilio, Kida y Álvaro (Curso 2ºDAM 24-25)", 10,0,0,"center")
+
+
+
+
+    def mainFrames(self):
+        self.geometry("800x500")
+        self.title("Juego KAE")
+
+        self.cabecera= tk.Frame(
+            self,
+            bg = self.color_cabecera,
+            height = 80,
+  
+        )
+        self.cabecera.pack(side = tk.TOP, fill = "both")
+        self.cabecera.propagate(False)
+
+        self.sidebar = tk.Frame(
+            self,
+            bg = self.color_cabecera,
+            width= 200,
+        )
+        self.sidebar.pack(side = tk.LEFT, fill = "both")
+        self.sidebar.propagate(True)
+
+        
+
+        self.fondo = tk.Frame(
+            self,
+            bg = self.color_fondo,
+        )
+        self.fondo.pack(expand = True, fill = "both")
+        self.fondo.propagate(False)
+
+        lblTitulo=self.genTexto(self.cabecera,"Juego KEA",30,0,0,"n")
+        btnMainMandarCorreo=self.genButton(self.sidebar,"Mandar al correo",{},5,10,"center")
+        btnMainMostrarGrafica=self.genButton(self.sidebar,"Mostrar gráfica",{},5,10,"center")
+        btnMainGenerarPDF=self.genButton(self.sidebar,"Generar PDF",{},5,10,"center")
+        btnMainCerrarSesion=self.genButton(self.sidebar,"Cerrar sesión",lambda:self.ventanaLogin(),5,20,"s")
