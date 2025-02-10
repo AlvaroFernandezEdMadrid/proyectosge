@@ -31,7 +31,7 @@ class CrearGrafica:
         return fechas, puntuaciones
     
     def dibujar_grafica(self):
-        # Obtener las últimas 10 partidas y sus puntuaciones
+        # Obtener las ultimas 10 partidas y sus puntuaciones
         fechas, puntuaciones = self.obtener_ultimas_partidas()
         
         # Si no hay partidas, muestra un mensaje
@@ -41,12 +41,17 @@ class CrearGrafica:
         
         # Graficar
         plt.figure(figsize=(10, 6))
-        plt.plot(fechas, puntuaciones, marker='o', color='b', linestyle='-', markersize=6, label="Puntuación")
+        plt.plot(fechas, puntuaciones, marker='o', color='b', linestyle='-', markersize=6, label="Puntuacion")
         plt.xlabel('Fecha de la Partida')
-        plt.ylabel('Puntuación')
-        plt.title(f'Últimas 10 partidas de {self.username}')
-        plt.xticks(rotation=45)  # Rota las fechas para que sean legibles
+        plt.ylabel('Puntuacion')
+        plt.title(f'Ultimas 10 partidas de {self.username}')
+        plt.xticks(rotation=45)  # Rota las fechas para que aparezcan en orden cronologico.
         plt.grid(True)
         plt.tight_layout()
         plt.legend()
+
+        # Guardar grafica como una
+        plt.savefig(f'{self.username}_grafica.png')  # Cambia el nombre del archivo al del usuario.
+        print(f"Grafica guardada como {self.username}_grafica.png")
+        
         plt.show()
