@@ -50,8 +50,7 @@ class CrearGrafica:
         plt.tight_layout()
         plt.legend()
 
-        # Guardar grafica como una imagen
-        plt.savefig(f'{self.username}_grafica.png')  # Cambia el nombre del archivo al del usuario.
-        print(f"Grafica guardada como {self.username}_grafica.png")
+        # Guardar grafica como imagen
+        plt.savefig(f'grafica.png')
         
         plt.show()
