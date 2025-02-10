@@ -2,44 +2,52 @@ import tkinter as tk
 from temas import LightTheme
 from temas import DarkTheme
 from conexion import Conexion
+import tkinter.messagebox as MessageBox
 from jugador import Jugador
 import threading
+from CrearGrafica import CrearGrafica
 
 
 
 class Ventana(tk.Tk):
-    def __init__(self,tema,title,weight, height, x, y):
+    def __init__(self, tema, title, width, height):
         super().__init__()
 
-        self.nickname=""
-        self.password=""
-        self.email=""
-        
-        self.weight = weight
+        self.nickname = ""
+        self.password = ""
+        self.email = ""
+
+        self.width = width
         self.height = height
-        self.x = x
-        self.y = y
         self.miTitulo = title
-        if(tema==True):
-            self.color_cabecera=LightTheme().Color_Cabecera
-            self.color_fondo=LightTheme().Color_Fondo
-            self.color_footer= LightTheme().Color_Pie
-            self.color_texto=LightTheme().Color_Texto
+
+        if tema:
+            self.color_cabecera = LightTheme().Color_Cabecera
+            self.color_fondo = LightTheme().Color_Fondo
+            self.color_footer = LightTheme().Color_Pie
+            self.color_texto = LightTheme().Color_Texto
         else:
-            self.color_cabecera=DarkTheme().Color_Cabecera
-            self.color_fondo=DarkTheme().Color_Fondo
-            self.color_footer= DarkTheme().Color_Pie
-            self.color_texto=DarkTheme().Color_Texto
-        
-        self.geometry("%dx%d+%d+%d" %(self.weight, self.height, self.x, self.y))
+            self.color_cabecera = DarkTheme().Color_Cabecera
+            self.color_fondo = DarkTheme().Color_Fondo
+            self.color_footer = DarkTheme().Color_Pie
+            self.color_texto = DarkTheme().Color_Texto
+
+            pantalla_ancho = self.winfo_screenwidth()
+            pantalla_alto = self.winfo_screenheight()
+
+            x = (pantalla_ancho // 2) - (self.width // 2)
+            y = (pantalla_alto // 2) - (self.height // 2)
+
+        self.geometry(f"{self.width}x{self.height}+{x}+{y}")
         self.title(self.miTitulo)
         self.resizable(False, False)
 
-        self.conec=Conexion()
+        self.conec = Conexion()
         self.conec.crearDB()
-        #self.conec.cargarDatos()
-        
+        # self.conec.cargarDatos()
+
         self.loginFrames()
+
         
 
     #GENERADORES DE WIDGETS
@@ -99,10 +107,13 @@ class Ventana(tk.Tk):
         self.mainFrames()
         
 
-    def Logear(self,username,pwd):
-        if self.conec.loginUsuario(username,pwd):
-            self.nickname=username
+    def Logear(self, username, pwd):
+        if self.conec.loginUsuario(username, pwd):
+            self.nickname = username
             self.VentanaPrincipal()
+        else:
+            MessageBox.showwarning("Error", "El usuario o la contraseña son incorrectos. Intentalo de nuevo.")
+
 
     
     #PANTALLAS
@@ -206,9 +217,17 @@ class Ventana(tk.Tk):
 
 
 
+    def mostrarGrafica(self):
+        # Crear instancia de CrearGrafica pasando nombre de usuario
+        grafica = CrearGrafica(self.nickname)
+        # Llamar metodo para dibujar grafica
+        grafica.dibujar_grafica(self.fondo)
+        
+
+
     def mainFrames(self):
         self.geometry("800x500")
-        self.title("Juego KAE")
+        self.title("Juego KEA")
 
         self.cabecera= tk.Frame(
             self,
@@ -237,8 +256,10 @@ class Ventana(tk.Tk):
         self.fondo.propagate(False)
 
         #BOTONES MAIN FRAME
-        lblTitulo=self.genTexto(self.cabecera,"Juego KEA",30,0,0,"n")
+        lblTitulo=self.genTexto(self.cabecera,f"Bienvenido {self.nickname}",30,0,0,"n")
         btnMainMandarCorreo=self.genButton(self.sidebar,"Mandar al correo",{},5,10,"center")
-        btnMainMostrarGrafica=self.genButton(self.sidebar,"Mostrar gráfica",{},5,10,"center")
+        
+        btnMainMostrarGrafica = self.genButton(self.sidebar,"Mostrar gráfica",lambda: self.mostrarGrafica(),5, 10, "center")
+        
         btnMainGenerarPDF=self.genButton(self.sidebar,"Generar PDF",{},5,10,"center")
         btnMainCerrarSesion=self.genButton(self.sidebar,"Cerrar sesión",lambda:self.ventanaLogin(),5,20,"s")
