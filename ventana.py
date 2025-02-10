@@ -3,6 +3,7 @@ from temas import LightTheme
 from temas import DarkTheme
 from conexion import Conexion
 from jugador import Jugador
+import threading
 
 
 
@@ -34,6 +35,10 @@ class Ventana(tk.Tk):
         self.title(self.miTitulo)
         self.resizable(False, False)
 
+        self.conec=Conexion()
+        self.conec.crearDB()
+        #self.conec.cargarDatos()
+        
         self.loginFrames()
         
 
@@ -132,8 +137,9 @@ class Ventana(tk.Tk):
         usuarioE=self.genEntry(self.fondo,self.nickname,0,0)
         passwordLbl=self.genTexto(self.fondo,"Contraseña", 15,0,0,"s")
         passwordE=self.genEntry(self.fondo,self.password,0,0)
+        passwordE.configure(show="*")
         
-        loginbtn=self.genButton(self.fondo,"Acceder",lambda:self.VentanaPrincipal(),0,20,"n")
+        loginbtn=self.genButton(self.fondo,"Acceder",lambda:self.Logear(usuarioE.get(),passwordE.get()),0,20,"n")
 
         registerbtn=self.genLink(self.fondo,"¿No tienes cuenta? Únete",lambda:self.ventanaRegister(),0,10,"n")
 
@@ -142,6 +148,9 @@ class Ventana(tk.Tk):
 
         footerLbl=self.genTexto(self.footer,"Creado por Emilio, Kida y Álvaro (Curso 2ºDAM 24-25)", 10,0,0,"center")
 
+    def Logear(self,username,pwd):
+        if self.conec.loginUsuario(username,pwd):
+            self.VentanaPrincipal()
 
     def registerFrames(self):
 
@@ -178,10 +187,11 @@ class Ventana(tk.Tk):
         usuarioE=self.genEntry(self.fondo,self.nickname,0,0)
         passwordLbl=self.genTexto(self.fondo,"Contraseña", 15,0,0,"s")
         passwordE=self.genEntry(self.fondo,self.password,0,0)
+        passwordE.configure(show="*")
         emailLbl=self.genTexto(self.fondo,"E-mail", 15,0,0,"s")
         emailE=self.genEntry(self.fondo,self.email,0,0)
         
-        loginbtn=self.genButton(self.fondo,"Registrar",lambda:self.VentanaPrincipal(),0,20,"n")
+        loginbtn=self.genButton(self.fondo,"Registrar",lambda:self.conec.addUsuario(usuarioE.get(),emailE.get(),passwordE.get()),0,20,"n")
 
         registerbtn=self.genLink(self.fondo,"Ingresar",lambda:self.ventanaLogin(),0,10,"n")
 
