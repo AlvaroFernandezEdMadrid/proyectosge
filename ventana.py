@@ -42,7 +42,7 @@ class Ventana(tk.Tk):
         self.loginFrames()
         
 
-    #WIDGETS
+    #GENERADORES DE WIDGETS
     def genTexto(self,donde,texto,size,padx,pady,pos):
        
         text= tk.Label(donde, text= texto, bg=donde.cget('bg'), font=("Constantia",size,"bold"), fg=self.color_texto )
@@ -58,8 +58,8 @@ class Ventana(tk.Tk):
 
     def genButton(self,donde,texto,funcion,padx,pady,pos):
        
-       boton=tk.Button(donde,text=texto, command= funcion)
-       boton.pack(anchor=pos, padx=padx,pady=pady, ipadx=0, ipady=0 )
+       boton=tk.Button(donde,text=texto, command= funcion,)
+       boton.pack(anchor=pos, padx=padx,pady=pady, ipadx=0, ipady=0)
        
        return boton
     
@@ -71,7 +71,7 @@ class Ventana(tk.Tk):
        return boton
     
 
-
+    #FUNCIONES DE BORRADO Y CAMBIO DE PANTALLA
     def deleteInFrames(self,donde):
         for widget in donde.winfo_children():
             widget.destroy()
@@ -84,6 +84,8 @@ class Ventana(tk.Tk):
         self.footer.destroy()
 
     def ventanaLogin(self):
+        self.nickname=""
+        self.password=""
         self.cambioPantalla()
         self.loginFrames()
         
@@ -97,6 +99,10 @@ class Ventana(tk.Tk):
         self.mainFrames()
         
 
+    def Logear(self,username,pwd):
+        if self.conec.loginUsuario(username,pwd):
+            self.nickname=username
+            self.VentanaPrincipal()
 
     
     #PANTALLAS
@@ -131,6 +137,8 @@ class Ventana(tk.Tk):
         self.fondo.pack(expand = True, fill = "both")
         self.fondo.propagate(False)
 
+
+        #BOTONES FRAMES LOGIN
         tituloCabecera=self.genTexto(self.cabecera,"Login",25,0,20,"center")
 
         usuarioLbl=self.genTexto(self.fondo,"Usuario", 15,0,0,"s")
@@ -139,18 +147,12 @@ class Ventana(tk.Tk):
         passwordE=self.genEntry(self.fondo,self.password,0,0)
         passwordE.configure(show="*")
         
-        loginbtn=self.genButton(self.fondo,"Acceder",lambda:self.Logear(usuarioE.get(),passwordE.get()),0,20,"n")
+        loginbtn=self.genButton(self.fondo,"Acceder",lambda:threading.Thread(target=self.Logear(usuarioE.get(),passwordE.get())).start(),0,20,"n")
 
         registerbtn=self.genLink(self.fondo,"¿No tienes cuenta? Únete",lambda:self.ventanaRegister(),0,10,"n")
 
-
-
-
         footerLbl=self.genTexto(self.footer,"Creado por Emilio, Kida y Álvaro (Curso 2ºDAM 24-25)", 10,0,0,"center")
 
-    def Logear(self,username,pwd):
-        if self.conec.loginUsuario(username,pwd):
-            self.VentanaPrincipal()
 
     def registerFrames(self):
 
@@ -181,6 +183,7 @@ class Ventana(tk.Tk):
         self.fondo.pack(expand = True, fill = "both")
         self.fondo.propagate(False)
 
+        #BOTONES FRAMES REGISTRO
         tituloCabecera=self.genTexto(self.cabecera,"Registrar",25,0,20,"center")
 
         usuarioLbl=self.genTexto(self.fondo,"Usuario", 15,0,0,"s")
@@ -191,7 +194,7 @@ class Ventana(tk.Tk):
         emailLbl=self.genTexto(self.fondo,"E-mail", 15,0,0,"s")
         emailE=self.genEntry(self.fondo,self.email,0,0)
         
-        loginbtn=self.genButton(self.fondo,"Registrar",lambda:self.conec.addUsuario(usuarioE.get(),emailE.get(),passwordE.get()),0,20,"n")
+        loginbtn=self.genButton(self.fondo,"Registrar",lambda:threading.Thread(target=self.conec.addUsuario(usuarioE.get(),emailE.get(),passwordE.get())).start(),0,20,"n")
 
         registerbtn=self.genLink(self.fondo,"Ingresar",lambda:self.ventanaLogin(),0,10,"n")
 
@@ -233,6 +236,7 @@ class Ventana(tk.Tk):
         self.fondo.pack(expand = True, fill = "both")
         self.fondo.propagate(False)
 
+        #BOTONES MAIN FRAME
         lblTitulo=self.genTexto(self.cabecera,"Juego KEA",30,0,0,"n")
         btnMainMandarCorreo=self.genButton(self.sidebar,"Mandar al correo",{},5,10,"center")
         btnMainMostrarGrafica=self.genButton(self.sidebar,"Mostrar gráfica",{},5,10,"center")
