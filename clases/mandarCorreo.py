@@ -1,5 +1,6 @@
 import tkinter as tk
-from correoBien import MandarEmail
+from kida.correoBien import MandarEmail
+from CrearGrafica import CrearGrafica
 
 def enviar_email():
     username = entry_username.get()
