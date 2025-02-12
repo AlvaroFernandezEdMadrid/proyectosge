@@ -14,48 +14,50 @@
         <p>&nbsp;</p>
         <p>Esta es tu punuaci&oacute;n para el ranking global {{puntuacion}}.</p>
         <p>&nbsp;</p>
+        <!--En la base de datos si no hay jugadores suficientes da una excepcion de 
+        fuera de limites al intentar poner los datos en el pdf de los usuarios y puntuaciones-->
         <p>Estos son el top 10 jugadores y sus puntuaciones:</p>
         <table style="border-collapse: collapse; width: 30%;" border="1">
             <tbody>
                 <tr>
-                    <td style="width: 50%;">{{jugador}}</td>
-                    <td style="width: 50%;">{{puntuaciontotal}}</td>
+                    <td style="width: 50%;">{{top10[0][0]}}</td>
+                    <td style="width: 50%;">{{top10[0][1]}}</td>
                 </tr>
                 <tr>
-                    <td style="width: 50%;">{{jugador2}}</td>
-                    <td style="width: 50%;">{{puntuacionJugador2}}</td>
+                    <td style="width: 50%;">{{top10[1][0]}}</td>
+                    <td style="width: 50%;">{{top10[1][1]}}</td>
                 </tr>
                 <tr>
-                    <td style="width: 50%;">{{jugador3}}</td>
-                    <td style="width: 50%;">{{puntuacionJugador3}}</td>
+                    <td style="width: 50%;">{{top10[2][0]}}</td>
+                    <td style="width: 50%;">{{top10[2][1]}}</td>
                 </tr>
                 <tr>
-                    <td style="width: 50%;">{{jugador4}}</td>
-                    <td style="width: 50%;">{{puntuacionJugador4}}</td>
+                    <td style="width: 50%;">{{top10[3][0]}}</td>
+                    <td style="width: 50%;">{{top10[3][1]}}</td>
                 </tr>
                 <tr>
-                    <td style="width: 50%;">{{jugador5}}</td>
-                    <td style="width: 50%;">{{puntuacionJugador5}}</td>
+                    <td style="width: 50%;">{{top10[4][0]}}</td>
+                    <td style="width: 50%;">{{top10[4][1]}}</td>
                 </tr>
                 <tr>
-                    <td style="width: 50%;">{{jugador6}}</td>
-                    <td style="width: 50%;">{{puntuacionJugador6}}</td>
+                    <td style="width: 50%;">{{top10[5][0]}}</td>
+                    <td style="width: 50%;">{{top10[5][1]}}</td>
                 </tr>
                 <tr>
-                    <td style="width: 50%;">{{jugador7}}</td>
-                    <td style="width: 50%;">{{puntuacionJugador7}}</td>
+                    <td style="width: 50%;">{{top10[6][0]}}</td>
+                    <td style="width: 50%;">{{top10[6][1]}}</td>
                 </tr>
                 <tr>
-                    <td style="width: 50%;">{{jugador8}}</td>
-                    <td style="width: 50%;">{{puntuacionJugador8}}</td>
+                    <td style="width: 50%;">{{top10[7][0]}}</td>
+                    <td style="width: 50%;">{{top10[7][7]}}</td>
                 </tr>
                 <tr>
-                    <td style="width: 50%;">{{jugador9}}</td>
-                    <td style="width: 50%;">{{puntuacionJugador9}}</td>
+                    <td style="width: 50%;">{{top10[8][0]}}</td>
+                    <td style="width: 50%;">{{top10[8][1]}}</td>
                 </tr>
                 <tr>
-                    <td style="width: 50%;">{{jugador10}}</td>
-                    <td style="width: 50%;">{{puntuacionJugador10}}</td>
+                    <td style="width: 50%;">{{top10[9][0]}}</td>
+                    <td style="width: 50%;">{{top10[9][1]}}</td>
                 </tr>
             </tbody>
         </table>
